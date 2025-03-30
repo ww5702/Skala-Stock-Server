@@ -1,0 +1,1 @@
+# Skala-Stock-Project
