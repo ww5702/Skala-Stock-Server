@@ -1,4 +1,4 @@
-package com.skala.stock.exception;
+package com.skala.stock.config;
 
 import java.util.HashMap;
 import java.util.Map;

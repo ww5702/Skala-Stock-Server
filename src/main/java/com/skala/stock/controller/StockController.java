@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/api/stocks")
 @RequiredArgsConstructor
 public class StockController {
-
+    
     private final StockService stockService;
 
     @GetMapping

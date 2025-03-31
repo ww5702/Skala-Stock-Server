@@ -35,9 +35,12 @@ public class PlayerController {
     private PlayerRepository playerRepository;
 
     @GetMapping
-    public List<Player> getAllPlayers() {
-        return playerService.getAllPlayers();
+    public List<PlayerResponse> getAllPlayers() {
+        return playerService.getAllPlayers().stream()
+                .map(PlayerResponse::from)
+                .toList();
     }
+
 
     @GetMapping("/{id}")
     public Player getPlayer(@PathVariable String id) {

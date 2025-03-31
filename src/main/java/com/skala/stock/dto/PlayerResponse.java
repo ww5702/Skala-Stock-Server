@@ -18,7 +18,7 @@ public class PlayerResponse {
     private int money;
     private List<StockResponse> stocks;
 
-    // ⚠ static 메서드는 클래스 내부에 있어야 합니다
+    // static 메서드는 클래스 내부에 있어야 합니다
     public static PlayerResponse from(Player player) {
         List<StockResponse> stockResponses = player.getStocks().stream()
                 .map(ps -> new StockResponse(
