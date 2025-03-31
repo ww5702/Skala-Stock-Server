@@ -8,4 +8,5 @@ import lombok.Setter;
 public class CreatePlayerRequest {
     private String id;
     private int money;
+    private String password;
 }

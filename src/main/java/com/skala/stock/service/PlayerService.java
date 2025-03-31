@@ -1,12 +1,13 @@
 package com.skala.stock.service;
 
-import com.skala.stock.domain.Player;
-import com.skala.stock.repository.PlayerRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.skala.stock.domain.Player;
+import com.skala.stock.repository.PlayerRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -25,16 +26,12 @@ public class PlayerService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 플레이어입니다."));
     }
 
-    /** 플레이어 등록 (이미 있으면 오류) */
-    public Player createPlayer(String id, int money) {
-        if (playerRepository.existsById(id)) {
-            throw new IllegalArgumentException("이미 존재하는 플레이어 ID입니다.");
-        }
-
+    // 사용자 등록 (비밀번호 포함)
+    public Player createPlayer(String id, int money, String password) {
         Player player = new Player();
         player.setId(id);
         player.setMoney(money);
-
+        player.setPassword(password); // ← 비밀번호 저장
         return playerRepository.save(player);
     }
 }

@@ -12,8 +12,8 @@ public class Player {
 
     @Id
     private String id;
-
     private int money;
+    private String password;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlayerStock> stocks = new ArrayList<>();
