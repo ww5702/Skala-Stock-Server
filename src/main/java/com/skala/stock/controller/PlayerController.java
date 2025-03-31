@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skala.stock.domain.Player;
 import com.skala.stock.dto.CreatePlayerRequest;
+import com.skala.stock.dto.PlayerResponse;
 import com.skala.stock.repository.PlayerRepository;
 import com.skala.stock.service.PlayerService;
 
@@ -42,6 +43,13 @@ public class PlayerController {
     public Player getPlayer(@PathVariable String id) {
         return playerService.getPlayer(id);
     }
+    // 플레이어 정보 + 보유 주식 응답용 (Vue용)
+    @GetMapping("/{id}/details")
+    public PlayerResponse getPlayerDetails(@PathVariable String id) {
+        Player player = playerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        return PlayerResponse.from(player);
+    }
 
     @PostMapping
     public Player createPlayer(@RequestBody CreatePlayerRequest request) {
@@ -57,7 +65,7 @@ public class PlayerController {
     }
 
     
-
+    
 
 
 }

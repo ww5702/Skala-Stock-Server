@@ -1,9 +1,15 @@
 package com.skala.stock.controller;
 
-import com.skala.stock.service.TradeService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.skala.stock.dto.PlayerResponse;
 import com.skala.stock.dto.TradeRequest;
+import com.skala.stock.service.TradeService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/trade")
@@ -13,15 +19,20 @@ public class TradeController {
     private final TradeService tradeService;
 
     @PostMapping("/buy")
-    public String buyStock(@RequestBody TradeRequest request) {
-        tradeService.buyStock(request.getPlayerId(), request.getStockName(), request.getQuantity());
-        return "매수 성공";
+    public PlayerResponse buyStock(@RequestBody TradeRequest request) {
+        return tradeService.buyStock(
+                request.getPlayerId(),
+                request.getStockName(),
+                request.getQuantity()
+        );
     }
 
     @PostMapping("/sell")
-    public String sellStock(@RequestBody TradeRequest request) {
-        tradeService.sellStock(request.getPlayerId(), request.getStockName(), request.getQuantity());
-        return "매도 성공";
+    public PlayerResponse sellStock(@RequestBody TradeRequest request) {
+        return tradeService.sellStock(
+                request.getPlayerId(),
+                request.getStockName(),
+                request.getQuantity()
+        );
     }
-
 }
