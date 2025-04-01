@@ -1,9 +1,9 @@
 package com.skala.stock.dto;
 
-import com.skala.stock.domain.Player;
-import com.skala.stock.dto.StockResponse;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.skala.stock.domain.Player;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class PlayerResponse {
         List<StockResponse> stockResponses = player.getStocks().stream()
                 .map(ps -> new StockResponse(
                         ps.getStock().getName(),
-                        ps.getStock().getPrice(),
+                        ps.getPrice(),
                         ps.getQuantity()))
                 .collect(Collectors.toList());  // toList()는 Java 16+만 가능
 

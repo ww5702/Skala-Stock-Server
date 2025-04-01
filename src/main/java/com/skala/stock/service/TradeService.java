@@ -49,7 +49,9 @@ public class TradeService {
             playerStock.setPlayer(player);
             playerStock.setStock(stock);
             playerStock.setQuantity(quantity);
+            playerStock.setPrice(stock.getPrice()); // 매수 당시 가격 저장
             player.addPlayerStock(playerStock);
+            playerStockRepository.save(playerStock); // ✅ 이거 꼭 필요!
         }
 
         return PlayerResponse.from(player);
