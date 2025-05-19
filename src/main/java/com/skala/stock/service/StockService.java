@@ -12,7 +12,7 @@ import java.util.List;
 public class StockService {
 
     private final StockRepository stockRepository;
-
+    
     /** 전체 주식 목록 조회 */
     public List<Stock> getAllStocks() {
         return stockRepository.findAll();

@@ -12,6 +12,7 @@ ENV SPRING_PROFILES_ACTIVE=prod
 
 # 외부에서 접근할 포트 지정
 EXPOSE 8080
+EXPOSE 8081
 
 # jar 파일 실행
 ENTRYPOINT ["java", "-jar", "app.jar"]
