@@ -19,6 +19,7 @@ spec:
         app: sk047-stock-backend
     spec:
       serviceAccountName: default
+      terminationGracePeriodSeconds: 5  # 🔧 종료 지연 최소화
       containers:
         - name: sk047-stock-backend
           image: amdp-registry.skala-ai.com/skala25a/sk047-my-app:1.0.0-1-8912616fcb78
@@ -39,10 +40,10 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            timeoutSeconds: 3
-            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 2
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
