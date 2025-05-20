@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: sk034-stock-backend
+  name: sk047-stock-backend
   namespace: skala-practice
 spec:
   selector:
-    app: sk034-stock-backend
+    app: sk047-stock-backend
   ports:
     - name: http
       protocol: TCP
