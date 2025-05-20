@@ -22,7 +22,7 @@ spec:
       terminationGracePeriodSeconds: 5  # 🔧 종료 지연 최소화
       containers:
         - name: sk047-stock-backend
-          image: amdp-registry.skala-ai.com/skala25a/sk047-my-app:1.0.0-3-ace4f92bbee8
+          image: amdp-registry.skala-ai.com/skala25a/sk047-my-app:1.0.0-4-dbf40aaddc31
           imagePullPolicy: Always
           env:
             - name: USER_NAME
