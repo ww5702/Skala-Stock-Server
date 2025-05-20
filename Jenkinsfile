@@ -18,56 +18,42 @@ pipeline {
             steps {
                 git branch: "${GIT_BRANCH}",
                     url: "${GIT_URL}",
-                    credentialsId: "${GIT_ID}"
+                    credentialsId: "${GIT_ID}"   // GitHub PAT credential ID
             }
         }
 
-        stage('Build with Gradle + Java 21') {
+        stage('Build with Gradle') {
             steps {
-                sh '''
-                    echo "🛠️ ARM64용 Java 21 다운로드"
-                    curl -L -o openjdk-21.tar.gz https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.1%2B12/OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.1_12.tar.gz
-
-                    echo "🧹 기존 디렉토리 정리"
-                    rm -rf jdk-21
-
-                    echo "📦 압축 해제 → jdk-21"
-                    mkdir jdk-21
-                    tar -xzf openjdk-21.tar.gz --strip-components=1 -C jdk-21
-
-                    export JAVA_HOME=$PWD/jdk-21
-                    export PATH=$JAVA_HOME/bin:$PATH
-
-                    echo "✅ java -version 확인"
-                    java -version
-
-                    echo "⚙️ Gradle 빌드"
-                    chmod +x ./gradlew
-                    ./gradlew clean build -x test
-                '''
+                sh './gradlew clean build -x test'
             }
         }
+
 
         stage('Docker Build & Push') {
             steps {
                 script {
+                    // 해시코드 12자리 생성
                     def hashcode = sh(
                         script: "date +%s%N | sha256sum | cut -c1-12",
                         returnStdout: true
                     ).trim()
 
+                    // Build Number + Hash Code 조합 (IMAGE_TAG는 유지)
                     def FINAL_IMAGE_TAG = "${IMAGE_TAG}-${BUILD_NUMBER}-${hashcode}"
-                    echo "📦 Final Image Tag: ${FINAL_IMAGE_TAG}"
+                    echo "Final Image Tag: ${FINAL_IMAGE_TAG}"
 
                     docker.withRegistry("https://${IMAGE_REGISTRY}", "${DOCKER_CREDENTIAL_ID}") {
                         def appImage = docker.build("${IMAGE_REGISTRY}/${IMAGE_NAME}:${FINAL_IMAGE_TAG}", "--platform linux/amd64 .")
                         appImage.push()
                     }
-
+                
+                    // 최종 이미지 태그를 env에 등록 (나중에 deploy.yaml 수정에 사용)
                     env.FINAL_IMAGE_TAG = FINAL_IMAGE_TAG
                 }
             }
         }
+
+
 
         stage('Update deploy.yaml and Git Push') {
             steps {
@@ -91,7 +77,7 @@ pipeline {
                             if ! git diff --cached --quiet; then
                                 git commit -m "[AUTO] Update deploy.yaml with image ${env.FINAL_IMAGE_TAG}"
                                 git remote set-url origin https://${GIT_PUSH_USER}:${GIT_PUSH_PASSWORD}@${gitRepoPath}
-                                git push origin ${GIT_BRANCH}
+                                git push origin ${env.GIT_BRANCH}
                             else
                                 echo "No changes to commit."
                             fi
@@ -101,14 +87,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                sh '''
-                    echo "🚀 Kubernetes에 자동 배포 중..."
-                    kubectl apply -f ./k8s
-                    kubectl rollout status deployment/sk047-stock-backend
-                '''
-            }
-        }
+
     }
 }
+
